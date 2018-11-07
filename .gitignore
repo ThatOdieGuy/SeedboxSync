@@ -1,5 +1,6 @@
 # This is per server config
 config.js
+config.yaml
 
 *.log
 

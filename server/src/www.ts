@@ -1,30 +1,40 @@
 #!/usr/bin/env node
 
-import {NetworkEvent} from "../../../shared/NetworkConstants";
+import {NetworkEvent} from "../../shared/NetworkConstants";
+import * as yaml from 'js-yaml';
+import * as fs from 'fs';
 
 /**
  * Module dependencies.
  */
 
 
-const app = require('../app');
-
 const debug = require('debug')('seedboxsync:server');
-const http = require('http');
+import * as http from 'http';
+import * as socketIO from 'socket.io';
+import * as logger from './libs/Logger';
+import * as upath from 'upath';
 
-import socketIO = require('socket.io');
+// load config:
+try {
+    var doc = yaml.safeLoad(fs.readFileSync(upath.normalize(__dirname + '/../../config.yml'), 'utf-8'));
+    console.log(doc);
+} catch (e) {
+    console.log(e);
+}
 
-import winston = require('winston');
-const logger : winston.LoggerInstance = require('../libs/Logger');
 
-const config = require('../Config');
+// import * as config from '../Config');
 
-const syncController = require('../libs/SyncController');
+// const config = require('../Config');
+
+import * as syncController from './libs/SyncController';
+const app = require('./app');
 
 /**
  * Get port from environment and store in Express.
  */
-let port = normalizePort(config.port);
+let port = normalizePort(45532);
 app.set('port', port);
 
 /**
@@ -44,16 +54,16 @@ server.on('listening', onListening);
 const io = socketIO(server);
 
 io.on('connect', (socket) => {
-    logger.debug('client connected');
+    // logger.debug('client connected');
 
     socket.on('disconnect', () => {
-        logger.debug('client disconnected');
+        // logger.debug('client disconnected');
     });
 });
 
 setInterval(() => {
     if (io.engine["clientsCount"]) {
-        io.emit(NetworkEvent.DOWNLOADS.name(), syncController.downloadsStatus());
+        // io.emit(NetworkEvent.DOWNLOADS.name(), syncController.downloadsStatus());
     }
 }, 1000);
 
@@ -76,7 +86,8 @@ function normalizePort(val) {
     }
 
 
-    return config.originalValues.port;
+    return val
+    // return config.originalValues.port;
 }
 
 /**
@@ -95,11 +106,11 @@ function onError(error) {
     // handle specific listen errors with friendly messages
     switch (error.code) {
         case 'EACCES':
-            logger.error(bind + ' requires elevated privileges');
+            // logger.error(bind + ' requires elevated privileges');
             process.exit(1);
             break;
         case 'EADDRINUSE':
-            logger.error(bind + ' is already in use');
+            // logger.error(bind + ' is already in use');
             process.exit(1);
             break;
         default:

@@ -1,23 +1,24 @@
 require('source-map-support').install();
 
+//logging
 import winston = require('winston');
-const logger : winston.LoggerInstance = require('./libs/Logger');
+const logger = require('./libs/Logger');
 
 const appConfig = require('./Config');
 
-import express = require('express');
+import * as express from 'express';
 
-const exphbs = require('express-handlebars');
-const path = require('path');
+import * as exphbs from 'express-handlebars';
+import * as path from 'path';
 
-const favicon = require('serve-favicon');
-const morgan = require('morgan');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
+import * as favicon from 'serve-favicon';
+import * as morgan from 'morgan';
+import * as cookieParser from 'cookie-parser';
+import * as bodyParser from 'body-parser';
 
 const app = express();
 
-const webpack = require('webpack');
+import * as webpack from 'webpack';
 
 //This feels ghetto, it's because we're deep into the build folders.
 const clientRoot = "../../../../client/";
@@ -27,12 +28,12 @@ const webpackConfig = require(path.join(clientRoot, 'webpack.config.js'));
 //working
 //var webpackConfig = require('../../../../client/webpack.config.js');
 
-const users = require('./routes/users');
-const seedboxCallback = require('./routes/seedboxCallback');
-const status = require('./routes/status');
+import * as users from './routes/users';
+import * as seedboxCallback from './routes/seedboxCallback';
+import * as status from './routes/status';
+import * as ftpd from 'ftpd';
 
 if ("testFtpServer" in appConfig) {
-    const ftpd = require('ftpd');
 
     //override our settings if the test server is going to be up
     appConfig.seedboxFtp.host = "127.0.0.1";
@@ -83,7 +84,7 @@ if ("testFtpServer" in appConfig) {
     server.listen(21);
 }
 
-const downloader = require('./libs/SyncController');
+import * as downloader from './libs/SyncController';
 
 // view engine setup
 //app.set('views', path.join(__dirname, 'views'));
@@ -101,9 +102,9 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, clientRoot, 'public')));
 
-app.use('/', status);
-app.use('/users', users);
-app.use('/seedboxCallback', seedboxCallback);
+// app.use('/', status);
+// app.use('/users', users);
+// app.use('/seedboxCallback', seedboxCallback);
 
 const compiler = webpack(webpackConfig);
 
@@ -156,6 +157,6 @@ app.use(function (err, req, res, next) {
 });
 
 //Do an automatic sync request on launch.
-downloader.syncRequest();
+// downloader.syncRequest();
 
 module.exports = app;

@@ -1,6 +1,6 @@
 import * as winston from "winston";
 
-const logger : winston.LoggerInstance = new (winston.Logger)({
+const logger : winston.LoggerInstance = new (winston.createLogger)({
     transports: [
         new winston.transports.File(
             {

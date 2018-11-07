@@ -1,0 +1,28 @@
+seedboxFtp:
+    # ftp host
+    host: genesis.whatbox.ca
+    # ftp login info
+    user: rootyb
+    password: logv8e65
+    # Remote root folder to check for files to fetch
+    syncRoot: /home/rootyb/toUpload
+
+# Remap remote directories to local directories. Anything not matching one of the below will end up in the localSyncRoot above
+#pathMappings:
+#    - remotePath: /seedbox/toUpload/tv
+#    localPath: c:/seedbox/tv
+#    - remotePath: movies
+#    localPath: d:/movies/
+
+localSettings:
+    # How many files to download at once
+    countMax: 2
+    # Not used yet
+    speedMax: 300000
+    # The port to listen to for the status page and seedbox callback
+    config.port: 45532
+    # Keep this as false when you're setting up, but make sure to change this to true when everything checks out.
+    deleteRemoteFiles: false;
+    # How often to check for new files
+    pollingIntervalInSeconds: 10
+    localSyncRoot : /Volumes/Macintosh HD/Users/juross/downspoutfiles
